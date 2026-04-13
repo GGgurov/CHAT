@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TikTok Chat Widget</title>
+    <style>
+        /* Убираем все отступы и полосы прокрутки у страницы */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: transparent;
+            /* Делаем фон прозрачным для ОБС */
+        }
+
+        /* Контейнер для чата */
+        #chat-container {
+            position: absolute;
+            bottom: 0;
+            /* Прижимаем к самому низу */
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            /* Высота на весь экран */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            /* Содержимое всегда внизу */
+        }
+
+        /* Настройки самого фрейма TikFinity */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="chat-container">
+        <iframe src="https://tikfinity.zerody.one/widget/chat?cid=2916765" id="chat-frame" allowtransparency="true">
+        </iframe>
+    </div>
+
+    <script>
+        // Скрипт для "лечения" прокрутки на мобильных устройствах
+        const frame = document.getElementById('chat-frame');
+
+        function scrollToBottom() {
+            // Пытаемся проскроллить само окно вниз каждые 500мс
+            window.scrollTo(0, document.body.scrollHeight);
+
+            // Если браузер позволяет, скроллим и внутри (хотя TikFinity обычно это блокирует)
+            try {
+                if (frame.contentWindow) {
+                    frame.contentWindow.scrollTo(0, frame.contentWindow.document.body.scrollHeight);
+                }
+            } catch (e) {
+                // Игнорируем ошибки доступа к кросс-доменному фрейму
+            }
+        }
+
+        // Запускаем цикл автоскролла
+        setInterval(scrollToBottom, 500);
+
+        // Дополнительно скроллим при загрузке
+        window.onload = scrollToBottom;
+    </script>
+</body>
+
+</html>
